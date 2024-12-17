@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:5000
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./chrome_profiles:/app/chrome_profiles
+      - ./logs:/app/logs
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=src.server:app
